@@ -124,7 +124,7 @@ class _TodosPageState extends State<TodosPage> {
     try {
       RestOptions options = RestOptions(
           path: '/todo',
-          body: Uint8List.fromList('{\'test\': \'test\'}'.codeUnits));
+          body: Uint8List.fromList("{\"test\": \"test\"}".codeUnits));
       RestOperation restOperation = Amplify.API.post(restOptions: options);
       RestResponse response = await restOperation.response;
       print('POST call succeeded');
