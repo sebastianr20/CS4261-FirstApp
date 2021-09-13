@@ -1,15 +1,14 @@
 # first_flutter_app
 
-A new Flutter project.
+A Flutter project meant to get acquainted with AWS Amplify, API, and Lambda.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+1. Install Android SDK and Emulator (ideally through Android Studio)
+2. Node.js v12.x or later with npm v5.x or later
+3. Install Flutter SDK
+4. Run app through Android Studio or VS Code with emulator or plugging in phone directly 
+5. App was only tested on Android due to lack of access to Mac machines
 
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
