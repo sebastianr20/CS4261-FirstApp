@@ -11,6 +11,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'amplifyconfiguration.dart';
 import 'models/ModelProvider.dart';
 import 'models/Todo.dart';
+import 'dart:typed_data';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +33,6 @@ class TodosPage extends StatefulWidget {
 }
 
 class _TodosPageState extends State<TodosPage> {
-
   // subscription to Todo model update events - to be initialized at runtime
   late StreamSubscription _subscription;
 
@@ -44,13 +44,12 @@ class _TodosPageState extends State<TodosPage> {
 
   // amplify plugins
   final AmplifyDataStore _dataStorePlugin =
-  AmplifyDataStore(modelProvider: ModelProvider.instance);
+      AmplifyDataStore(modelProvider: ModelProvider.instance);
   final AmplifyAPI _apiPlugin = AmplifyAPI();
   final AmplifyAuthCognito _authPlugin = AmplifyAuthCognito();
 
   @override
   void initState() {
-
     // kick off app initialization
     _initializeApp();
 
@@ -59,14 +58,12 @@ class _TodosPageState extends State<TodosPage> {
 
   @override
   void dispose() {
-
     // cancel the subscription when the state is removed from the tree
     _subscription.cancel();
     super.dispose();
   }
 
   Future<void> _initializeApp() async {
-
     // configure Amplify
     await _configureAmplify();
 
@@ -82,6 +79,8 @@ class _TodosPageState extends State<TodosPage> {
     // fetch Todo entries from DataStore
     await _fetchTodos();
 
+    await _makePOSTRequest();
+
     // after both configuring Amplify and fetching Todo entries, update loading
     // ui state to loaded state
     setState(() {
@@ -91,7 +90,6 @@ class _TodosPageState extends State<TodosPage> {
 
   Future<void> _configureAmplify() async {
     try {
-
       // add Amplify plugins
       //await Amplify.addPlugins([_dataStorePlugin]);
       await Amplify.addPlugins([_dataStorePlugin, _apiPlugin, _authPlugin]);
@@ -101,7 +99,6 @@ class _TodosPageState extends State<TodosPage> {
       // note that Amplify cannot be configured more than once!
       await Amplify.configure(amplifyconfig);
     } catch (e) {
-
       // error handling can be improved for sure!
       // but this will be sufficient for the purposes of this tutorial
       print('An error occurred while configuring Amplify: $e');
@@ -110,7 +107,6 @@ class _TodosPageState extends State<TodosPage> {
 
   Future<void> _fetchTodos() async {
     try {
-
       // query for all Todo entries by passing the Todo classType to
       // Amplify.DataStore.query()
       List<Todo> updatedTodos = await Amplify.DataStore.query(Todo.classType);
@@ -121,6 +117,20 @@ class _TodosPageState extends State<TodosPage> {
       });
     } catch (e) {
       print('An error occurred while querying Todos: $e');
+    }
+  }
+
+  Future<void> _makePOSTRequest() async {
+    try {
+      RestOptions options = RestOptions(
+          path: '/todo',
+          body: Uint8List.fromList('{\'test\': \'test\'}'.codeUnits));
+      RestOperation restOperation = Amplify.API.post(restOptions: options);
+      RestResponse response = await restOperation.response;
+      print('POST call succeeded');
+      print(new String.fromCharCodes(response.data));
+    } on ApiException catch (e) {
+      print('POST call failed: $e');
     }
   }
 
@@ -160,8 +170,8 @@ class TodosList extends StatelessWidget {
   Widget build(BuildContext context) {
     return todos.length >= 1
         ? ListView(
-        padding: EdgeInsets.all(8),
-        children: todos.map((todo) => TodoItem(todo: todo)).toList())
+            padding: EdgeInsets.all(8),
+            children: todos.map((todo) => TodoItem(todo: todo)).toList())
         : Center(child: Text('Tap button below to add a todo!'));
   }
 }
@@ -183,11 +193,9 @@ class TodoItem extends StatelessWidget {
   }
 
   Future<void> _toggleIsComplete() async {
-
     // copy the Todo we wish to update, but with updated properties
     Todo updatedTodo = todo.copyWith(isComplete: !todo.isComplete);
     try {
-
       // to update data in DataStore, we again pass an instance of a model to
       // Amplify.DataStore.save()
       await Amplify.DataStore.save(updatedTodo);
@@ -215,7 +223,7 @@ class TodoItem extends StatelessWidget {
                 children: [
                   Text(todo.name,
                       style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   Text(todo.description ?? 'No description'),
                 ],
               ),
@@ -242,7 +250,6 @@ class _AddTodoFormState extends State<AddTodoForm> {
   final _descriptionController = TextEditingController();
 
   Future<void> _saveTodo() async {
-
     // get the current text field contents
     String name = _nameController.text;
     String description = _descriptionController.text;
@@ -284,7 +291,7 @@ class _AddTodoFormState extends State<AddTodoForm> {
               TextFormField(
                   controller: _descriptionController,
                   decoration:
-                  InputDecoration(filled: true, labelText: 'Description')),
+                      InputDecoration(filled: true, labelText: 'Description')),
               ElevatedButton(onPressed: _saveTodo, child: Text('Save'))
             ],
           ),

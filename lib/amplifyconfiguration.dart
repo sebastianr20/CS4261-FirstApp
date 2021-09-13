@@ -10,6 +10,12 @@ const amplifyconfig = ''' {
                     "region": "us-east-2",
                     "authorizationType": "API_KEY",
                     "apiKey": "da2-ruucmhixhnak5fcefcvh3a2dre"
+                },
+                "api": {
+                    "endpointType": "REST",
+                    "endpoint": "https://oov9biqli6.execute-api.us-east-2.amazonaws.com/staging",
+                    "region": "us-east-2",
+                    "authorizationType": "AWS_IAM"
                 }
             }
         }
