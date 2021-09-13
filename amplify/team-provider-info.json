@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "amplifiedtodo": {}
+      },
+      "function": {
+        "todo": {
+          "deploymentBucketName": "amplify-amplifiedtodo-staging-215804-deployment",
+          "s3Key": "amplify-builds/todo-6b4c7551333861685041-build.zip"
+        }
       }
     }
   }
